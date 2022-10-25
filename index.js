@@ -20,6 +20,7 @@ const login = () => {
 };
 
 const signup = () => {
+    document.location.href = "http://127.0.0.1:5500/html/home.html"
     // TO-DO:
     //     - Check if user is already in use and warn if it is 
     //     - Check if passwords match (and if they are hard enough)
