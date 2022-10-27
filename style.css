@@ -9,6 +9,7 @@
 
 .central-flex {
     display: flex;
+    justify-content: center;
     width: 100%;
     height: 86vh;
 }
@@ -125,3 +126,213 @@
     color: orchid;
 }
 
+
+
+
+
+
+
+/* still in test */
+
+span {
+    font-size: 3rem;
+}
+
+p {
+    font-family: "Roboto Slab", serif;
+}
+
+a,
+a:link,
+a:active,
+a:visited {
+    color: #0066aa;
+    text-decoration: none;
+    border-bottom: #000013 0.16rem solid;
+}
+
+.add-task-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 20rem;
+    height: 4.5rem;
+    margin: auto;
+    background: rgba(0, 0, 0, .5);
+    border: #000013 0.2rem solid;
+    border-radius: 3rem;
+    padding: 1rem 1rem 1.2rem 1rem;
+}
+
+.add-task-container button {
+    border-radius: 3rem;
+}
+
+.main-container {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.columns {
+    align-content: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    margin: 1.6rem auto;
+    background-color: #5e5c64;
+    border: #000013 0.16rem solid;
+    border-radius: 3rem;
+    padding: 2rem 1rem 1rem 0;
+
+}
+
+.column {
+    width: 20rem;
+    margin: 0 1rem;
+    padding: 0.5rem 0.25rem 0.31rem 0.25rem;
+    background: rgba(0, 0, 0, .5);
+    border: #000013 0.16rem solid;
+    border-radius: 3rem;
+}
+
+.column-header {
+    margin: 0.2rem 0.2rem 1.5rem 0.2rem;
+    padding: 0.3rem;
+    border: #000013 0.16rem solid;
+    border-radius: 3rem;
+}
+
+.column-header h4 {
+    text-align: center;
+}
+
+.to-do-column .column-header {
+    background: #ff872f;
+}
+
+.doing-column .column-header {
+    background: #13a4d9;
+}
+
+.done-column .column-header {
+    background: #15d072;
+}
+
+.trash-column .column-header {
+    background: #ff4444;
+}
+
+.task-list {
+    min-height: 3rem;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style-type: none;
+}
+
+.column-button {
+    text-align: center;
+    padding: 0.1rem;
+}
+
+.button {
+    font-family: "Arimo", sans-serif;
+    font-weight: 700;
+    border: #000013 0.14rem solid;
+    border-radius: 0.2rem;
+    color: #000013;
+    padding: 0.6rem 1rem;
+    margin-bottom: 0.3rem;
+    cursor: pointer;
+}
+
+.delete-button {
+    background-color: #ff4444;
+    margin: 0.1rem auto 0.6rem auto;
+}
+
+.delete-button:hover {
+    background-color: #fa7070;
+}
+
+.add-button {
+    background-color: #ffcb1e;
+    padding: 0 1rem;
+    height: 2.8rem;
+    width: 10rem;
+    margin-top: 0.6rem;
+}
+
+.add-button:hover {
+    background-color: #ffdd6e;
+}
+
+.task {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    vertical-align: middle;
+    list-style-type: none;
+    background: #5e5c64;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    margin: 0.4rem;
+    height: 4rem;
+    border: #000013 0.15rem solid;
+    border-radius: 3rem;
+    cursor: move;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#taskText {
+    background: #fff;
+    border: #000013 0.15rem solid;
+    border-radius: 0.2rem;
+    text-align: center;
+    font-family: "Roboto Slab", serif;
+    height: 4rem;
+    width: 7rem;
+    margin: auto 0.8rem auto 0.1rem;
+}
+
+.task p {
+    margin: auto;
+}
+
+/* Dragula CSS Release 3.2.0 from: https://github.com/bevacqua/dragula */
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+  }
+  .gu-hide {
+    display: none !important;
+  }
+  .gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+  }
+  .gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+  }
