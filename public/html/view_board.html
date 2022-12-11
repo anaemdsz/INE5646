@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css" />
+    <link rel="stylesheet" type="text/css" href="../css/view-board.css" />
+  </head>
+
+  <body>
+    <div id="header">
+      <span>Quadro XXXXXX</span>
+    </div>
+
+    <div class="content">
+      <div id="board">
+        <div id="board-header">
+          <div id="add-board">
+            <div class="input-row">
+              <span>Titulo</span>
+              <input class="input" />
+            </div>
+            <div class="input-row">
+              <span>Responsavel</span>
+              <select class="generic-select">
+                <option>UserA</option>
+              </select>
+            </div>
+            <div class="input-row">
+              <span>Status</span>
+              <select class="generic-select">
+                <option>TODO</option>
+                <option>DOING</option>
+                <option>DONE</option>
+              </select>
+            </div>
+
+            <button class="button button-green">Adicionar tarefa</button>
+          </div>
+          <div id="add-user">
+            <div class="input-row">
+              <span>Participante</span>
+              <select>
+                <option>User A</option>
+              </select>
+            </div>
+            <button class="button button-green">Adicionar participante</button>
+          </div>
+        </div>
+        <div id="card-columns">
+          <div class="card-column">
+            <div class="card-column-title">TOOD</div>
+            <div class="card">
+              <button class="button button-red">Excluir</button>
+              <div class="card-data">
+                <span>Tarefa: LALAL</span>
+                <span>Responsavel: Fulano</span>
+              </div>
+              <div class="move-buttons">
+                <button class="button button-green"><<< Mover</button>
+                <button class="button button-green">Mover >>></button>
+              </div>
+            </div>
+          </div>
+          <div class="card-column">
+            <div class="card-column-title">DOING</div>
+            <div class="card">
+              <button class="button button-red">Excluir</button>
+              <div class="card-data">
+                <span>Tarefa: LALAL</span>
+                <span>Responsavel: Fulano</span>
+              </div>
+              <div class="move-buttons">
+                <button class="button button-green"><<< Mover</button>
+                <button class="button button-green">Mover >>></button>
+              </div>
+            </div>
+            <div class="card">
+              <button class="button button-red">Excluir</button>
+              <div class="card-data">
+                <span>Tarefa: LALAL</span>
+                <span>Responsavel: Fulano</span>
+              </div>
+              <div class="move-buttons">
+                <button class="button button-green"><<< Mover</button>
+                <button class="button button-green">Mover >>></button>
+              </div>
+            </div>
+          </div>
+          <div class="card-column">
+            <div class="card-column-title">DONE</div>
+            <div class="card">
+              <button class="button button-red">Excluir</button>
+              <div class="card-data">
+                <span>Tarefa: LALAL</span>
+                <span>Responsavel: Fulano</span>
+              </div>
+              <div class="move-buttons">
+                <button class="button button-green"><<< Mover</button>
+                <button class="button button-green">Mover >>></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
