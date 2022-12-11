@@ -1,0 +1,19 @@
+#board-list {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.board-list-row {
+  border: 1px solid #000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+@media (max-width: 900px) {
+  #board-list {
+    width: 100%;
+  }
+}

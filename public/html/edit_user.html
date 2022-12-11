@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css" />
+  </head>
+
+  <body>
+    <div id="header">
+      <span>Editar usuario</span>
+    </div>
+
+    <div class="content">
+      <form action="/update-user" id="generic-form" method="post">
+        <div class="form-row">
+          <span>Nome</span> <input class="input" name="name" />
+        </div>
+        <div class="form-row">
+          <span>E-mail</span> <input type="email" class="input" name="email" />
+        </div>
+        <div class="form-row">
+          <span>Senha</span>
+          <input type="password" class="input" name="password" />
+        </div>
+        <div class="form-row">
+          <span>Confir. senha</span>
+          <input type="password" class="input" name="password" />
+        </div>
+        <input
+          type="submit"
+          value="Editar usuario"
+          class="button button-green"
+        />
+      </form>
+    </div>
+  </body>
+</html>
