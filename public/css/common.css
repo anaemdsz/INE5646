@@ -44,6 +44,7 @@
   padding: 5px;
   padding: 3px;
   font-size: 1.05rem;
+  cursor: pointer;
 }
 
 .button-green {
