@@ -78,33 +78,43 @@ Uma aplicação de quadros Kanban, com as seguintes funcionalidades:
 
 Exemplos de tabelas (que na verdade são objetos JSON) a serem armazenados no MongoDB.
 
-#### Usuário (User)
+#### Usuário (Users)
 ```json
 {
-    "UserId" : "Integer",
-    "Name" : "String",
-    "Email" : "String",
-    "Username" : "String",
-    "Password" : "String",
+    "_id" : "String", *UNIQUE           // Id gerenciado pelo MongoDB
+    "name" : "String",
+    "email" : "String",
+    "username" : "String" *UNIQUE,      // Identificador único
+    "password" : "String",
 }
 ```
 
-#### Quadro (Board)
+#### Quadro (Boards)
 ```json
 {
-    "BoardId" : "Integer",
-    "UserId" : "Integer",             // Usuário que criou o quadro.
-    "Participants" : "List[Integer]", // Participantes do quadro  (lista de UserIds).
-    "Title" : "String",
+    "_id" : "String" *UNIQUE,              // Id gerenciado pelo MongoDB
+    "username" : "String" *FOREIGN_KEY,     // Usuário que criou o quadro.
+    "title" : "String",
 }
 ```
 
-#### Tarefa (Card)
+#### Usuário_Quadro (Users_Boards)
+Tabela que une usuários e quadros.
 ```json
 {
-    "UserId" : "Integer",   // Usuário designado para esta tarefa.
-    "BoardId" : "Integer",  //
-    "Title" : "String",     // Tarefa simples, apenas com um título, sem outro detalhes.
-    "Column" : "Integer"    // 1 = TODO, 2 = Doing, 3 = Done.
+    "_id" : "String" *UNIQUE,              // Id gerenciado pelo MongoDB
+    "board_id" : "String" *UNIQUE,
+    "username" : "String" *FOREIGN_KEY,    // Usuário que criou o quadro.
+}
+```
+
+#### Tarefa (Cards)
+```json
+{
+    "_id" : "String" *UNIQUE,              // Id gerenciado pelo MongoDB
+    "username" : "String" *FOREIGN_KEY,     // Usuário designado para esta tarefa.
+    "board_id" : "Integer" *FOREIGN_KEY,    // Quadro do qual a tarefa faz parte.
+    "title" : "String",                     // Tarefa simples, apenas com um título, sem outro detalhes.
+    "column" : "Integer"                    // 1 = TODO, 2 = Doing, 3 = Done.
 }
 ```
