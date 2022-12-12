@@ -1,0 +1,30 @@
+{
+  "name": "config_react_servidor",
+  "version": "1.0.0",
+  "description": "Aplicação com React.",
+  "scripts": {
+    "start": "nodemon --exec npx babel-node src/app.js",
+    "build": "babel src -d build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "React server"
+  ],
+  "author": "Gilson",
+  "license": "ISC",
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "dotenv": "^8.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "mongodb": "^4.11.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/node": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "eslint": "^7.12.1",
+    "nodemon": "^2.0.6"
+  }
+}
