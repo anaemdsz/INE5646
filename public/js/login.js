@@ -5,6 +5,6 @@ const errorCode = parseInt(urlParameters.errorCode);
 
 switch (errorCode) {
   case 1:
-    console.log("Usuario e/ou senha incorretos");
+    alert("Usuario e/ou senha incorretos");
     break;
 }
