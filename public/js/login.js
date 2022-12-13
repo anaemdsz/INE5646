@@ -3,8 +3,15 @@ const urlParameters = Object.fromEntries(
 );
 const errorCode = parseInt(urlParameters.errorCode);
 
-switch (errorCode) {
-  case 1:
-    alert("Usuario e/ou senha incorretos");
-    break;
-}
+if (errorCode)
+  switch (errorCode) {
+    case 1:
+      alert("Usuario e/ou senha incorretos");
+      break;
+    case 2:
+      alert("Acesso negado. Efetue login primeiro.");
+      break;
+    default:
+      alert("Erro desconhecido.");
+      break;
+  }

@@ -1,9 +1,11 @@
 const bodyParser = require("body-parser");
 const express = require("express");
-const { MongoClient } = require("mongodb");
-const { User } = require("./models/user");
-const bcrypt = require("bcrypt");
+const { MongoClient, ServerApiVersion } = require("mongodb");
 const { handleCreateUser } = require("./routes/create-user");
+const { handleLogin } = require("./routes/login");
+const path = require("path");
+const { authenticate } = require("./src/auth");
+const cookieParser = require("cookie-parser");
 
 const dbURL =
   "mongodb+srv://antonio:6tytsjbFhChXDWka@cluster0.o6ecxhs.mongodb.net/?retryWrites=true&w=majority";
@@ -26,9 +28,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// User related requests
+app.use(cookieParser());
+
+app.use(authenticate);
+
+// User related requests\
+app.get("/login", (req, res) =>
+  res.sendFile(path.join(__dirname, "html", "login.html"))
+);
+app.get("/create-user", (req, res) =>
+  res.sendFile(path.join(__dirname, "html", "signup.html"))
+);
 app.post("/create-user", urlencodedParser, handleCreateUser);
-// app.post("/login", handleLogin);
+app.post("/login", urlencodedParser, handleLogin);
 // app.post("/edit-user", handleEditUser);
 
 // Board related requests
@@ -42,7 +54,7 @@ app.post("/create-user", urlencodedParser, handleCreateUser);
 // app.post("/move-task", handleMoveTask);
 // app.post("/delete-task", handleDeleteTask);
 
-app.listen(3000, async () => {
+app.listen(3001, async () => {
   await connectToDB();
   console.log("Express server succesfully started.");
 });
