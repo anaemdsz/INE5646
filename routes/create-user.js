@@ -47,4 +47,8 @@ module.exports = {
 
     res.redirect("/login");
   },
+  handleGetAllUsers: async (req, res) => {
+    const users = new User(req.database).findMany({});
+    return users;
+  }
 };

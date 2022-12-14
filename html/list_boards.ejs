@@ -4,7 +4,7 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <link rel="stylesheet" type="text/css" href="../css/common.css" />
     <link rel="stylesheet" type="text/css" href="../css/list-board.css" />
-    <!-- <script src="../js/boards.js"></script> -->
+    <script src="../js/boards.js"></script>
   </head>
 
   <body>
@@ -36,7 +36,7 @@
 
           <% if (boards.length > 0) { %>
             <% boards.forEach(board => { %>
-              <form action="/delete-board/<%= board._id %>" method="post">
+              <form action="/boards/<%= board._id %>/delete" method="post">
                 <div class="board-list-row">
                   <a href="/boards/<%= board._id %>"> <%= board.name %> </a>
                   <button class="button button-red" type="submit">Excluir</button>

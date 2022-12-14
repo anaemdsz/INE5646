@@ -27,11 +27,8 @@ module.exports = {
     res.redirect("/boards");
   },
   handleDeleteBoard: async (req, res, next) => {
-    console.log(req.params.id);
     const boardId = req.params.id;
-
     const boardModel = new Board(req.database);
-
     const board = await boardModel.find({ _id : boardId });
 
     if (!board) {
@@ -43,5 +40,46 @@ module.exports = {
     boardModel.deleteOne({ _id : boardId });
 
     res.redirect("/boards");
+  },
+  handleCreateTask: async (req, res, next) => {
+    const boardId = req.params.id;
+    const boardModel = new Board(req.database);
+    let board = await boardModel.find({ _id : boardId });
+
+    if (!board) {
+      console.log("Board not found.");
+      res.redirect(`/boards/?errorCode=2`);
+      return;
+    }
+
+    const task = {
+      name : req.body.name ?? "Sem título.",
+      username : req.body.username ?? "Nenhum.",
+    }
+
+    switch (req.body.column) {
+      case "2":
+        let doingTasks = board.doingTasks ?? [];
+        doingTasks.push(task);
+        board.doingTasks = doingTasks;
+        break;
+      case "3":
+        let doneTasks = board.doneTasks ?? [];
+        doneTasks.push(task);
+        board.doneTasks = doneTasks;
+        break;
+      case "1":
+      default:
+        let todoTasks = board.todoTasks ?? [];
+        todoTasks.push(task);
+        board.todoTasks = todoTasks;
+        break;
+    }
+
+    await boardModel.update(boardId, board);
+
+    console.log(`Updated board ${boardId}.`);
+
+    res.redirect(`/boards/${boardId}`);
   }
 };

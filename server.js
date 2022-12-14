@@ -10,8 +10,8 @@ const { authenticate } = require("./src/auth");
 
 const { handleLogin } = require("./routes/login");
 const { handleViewBoard } = require("./routes/view-board");
-const { handleCreateUser } = require("./routes/create-user");
-const { handleLoadBoards, handleCreateBoards, handleDeleteBoard } = require("./routes/list-boards");
+const { handleCreateUser, handleGetAllUsers } = require("./routes/create-user");
+const { handleLoadBoards, handleCreateBoards, handleDeleteBoard, handleCreateTask } = require("./routes/list-boards");
 
 const dbURL =
   "mongodb+srv://antonio:6tytsjbFhChXDWka@cluster0.o6ecxhs.mongodb.net/?retryWrites=true&w=majority";
@@ -60,8 +60,10 @@ app.get("/boards", async (req, res) => {
 });
 
 app.get("/boards/:id", async (req, res) => {
-  let board = await handleViewBoard(req, res);
-  res.send(await ejs.renderFile(path.join(__dirname, "html", "view_board.ejs"), { board : board }));
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "view_board.ejs"), {
+    board : await handleViewBoard(req, res),
+    users : await handleGetAllUsers(req, res),
+  }));
 });
 
 // Load resources
@@ -72,7 +74,8 @@ app.get("/boards/:id", async (req, res) => {
 app.post("/login", urlencodedParser, handleLogin);
 app.post("/create-user", urlencodedParser, handleCreateUser);
 app.post("/create-board", urlencodedParser, handleCreateBoards)
-app.post("/delete-board/:id", urlencodedParser, handleDeleteBoard)
+app.post("/boards/:id/delete", urlencodedParser, handleDeleteBoard)
+app.post("/boards/:id/create-task", urlencodedParser, handleCreateTask)
 
 // app.post("/edit-user", handleEditUser);
 

@@ -17,38 +17,3 @@ if (urlParameters.errorCode) {
       break;
   }
 }
-
-async function loadBoards() {
-  const res = await (await fetch("/load-boards")).json();
-  if (!res.boards) {
-    console.log("Error retrieving boards. Null was returned.");
-    return;
-  }
-
-  const boards = res.boards;
-  const boardsContainer = document.getElementById("boards");
-  boardsContainer.innerHTML = "";
-
-  if (boards.length == 0) {
-    boardsContainer.innerHTML +=
-    `
-      <div class="board-list-row">
-        <span> Nenhum quadro encontrado. </span>
-      </div>
-    `;
-  }
-
-  for (let board of boards) {
-    boardsContainer.innerHTML +=
-    `
-      <form action="/delete-board/${board._id}" method="post">
-        <div class="board-list-row">
-          <a href="/boards/${board._id}">${board.name}</a>
-          <button class="button button-red" type="submit">Excluir</button>
-        </div>
-      </form>
-    `;
-  }
-}
-
-loadBoards();

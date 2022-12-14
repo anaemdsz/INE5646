@@ -14,7 +14,7 @@ class Board {
   async update(id, updatedData) {
     const result = await this.db
       .collection("boards")
-      .updateOne({ _id: id }, updatedData);
+      .updateOne({ _id: id }, { $set : updatedData });
 
     result.matchedCount > 0
       ? console.log("Successfully updated the board", { result })
