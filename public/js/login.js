@@ -16,3 +16,4 @@ if (urlParameters.errorCode) {
       alert("Erro desconhecido.");
       break;
   }
+}

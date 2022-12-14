@@ -1,3 +1,5 @@
+const fs = require('fs');
+const ejs = require('ejs');
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -7,7 +9,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const { authenticate } = require("./src/auth");
 
 const { handleLogin } = require("./routes/login");
-const { handleLoadTasks } = require("./routes/view-board");
+const { handleViewBoard } = require("./routes/view-board");
 const { handleCreateUser } = require("./routes/create-user");
 const { handleLoadBoards, handleCreateBoards, handleDeleteBoard } = require("./routes/list-boards");
 
@@ -17,6 +19,9 @@ const dbClient = new MongoClient(dbURL);
 const dbName = "KanbanBoard";
 
 const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', './html');
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -37,35 +42,38 @@ app.use(cookieParser());
 app.use(authenticate);
 
 // User related requests\
-app.get("/login", (req, res) =>
-  res.sendFile(path.join(__dirname, "html", "login.html"))
+app.get("/login", async (req, res) =>
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "login.ejs")))
 );
 
-app.get("/create-user", (req, res) =>
-  res.sendFile(path.join(__dirname, "html", "signup.html"))
+app.get("/create-user", async (req, res) =>
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "signup.ejs")))
 );
 
-app.get("/edit_user", (req, res) =>
-  res.sendFile(path.join(__dirname, "html", "edit_user.html"))
+app.get("/edit_user", async (req, res) =>
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "edit_user.ejs")))
 );
 
-app.get("/list_boards", (req, res) => {
-  res.sendFile(path.join(__dirname, "html", "list_boards.html"));
+app.get("/boards", async (req, res) => {
+  let boards = await handleLoadBoards(req, res);
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "list_boards.ejs"), { boards : boards }));
 });
 
-app.get("/view_board", (req, res) =>
-  res.sendFile(path.join(__dirname, "html", "view_board.html"))
-);
+app.get("/boards/:id", async (req, res) => {
+  let board = await handleViewBoard(req, res);
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "view_board.ejs"), { board : board }));
+});
 
 // Load resources
-app.get("/load-boards", urlencodedParser, handleLoadBoards);
-app.get("/load-tasks", urlencodedParser, handleLoadTasks);
+// app.get("/load-boards", urlencodedParser, handleLoadBoards);
+// app.get("/view-board/:id", urlencodedParser, handleViewBoard)
 
 // Post
 app.post("/login", urlencodedParser, handleLogin);
 app.post("/create-user", urlencodedParser, handleCreateUser);
 app.post("/create-board", urlencodedParser, handleCreateBoards)
 app.post("/delete-board/:id", urlencodedParser, handleDeleteBoard)
+
 // app.post("/edit-user", handleEditUser);
 
 // Board related requests

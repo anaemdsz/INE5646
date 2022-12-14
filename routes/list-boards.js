@@ -2,23 +2,15 @@ const bcrypt = require("bcrypt");
 const { Board } = require("../models/board");
 
 module.exports = {
-  handleLoadBoards: async (req, res, next) => {
+  handleLoadBoards: async (req, res) => {
     const boards = await new Board(req.database).findMany({ username  : req.user.username });
-
     console.log("Loaded boards succesfully.");
-
-    res.setHeader("Content-Type", "application/json");
-    res.end(JSON.stringify({ "boards" : boards }));
-
-    next();
+    return boards;
   },
   handleCreateBoards: async (req, res, next) => {
-
-    console.log("creating boards...........................................");
-
     if (!req.body.name || req.body.name === "") {
       console.log("User attempted to create a board without providing a name");
-      res.redirect("/list_boards?errorCode=1");
+      res.redirect("/boards?errorCode=1");
       return;
     }
 
@@ -32,7 +24,7 @@ module.exports = {
 
     console.log("Successfully created board", data);
 
-    res.redirect("/list_boards");
+    res.redirect("/boards");
   },
   handleDeleteBoard: async (req, res, next) => {
     console.log(req.params.id);
@@ -44,12 +36,12 @@ module.exports = {
 
     if (!board) {
       console.log("Board not found.");
-      res.redirect("/list_boards?errorCode=2");
+      res.redirect("/boards?errorCode=2");
       return;
     }
 
     boardModel.deleteOne({ _id : boardId });
 
-    res.redirect("/list_boards");
+    res.redirect("/boards");
   }
 };
