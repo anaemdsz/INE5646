@@ -1,4 +1,3 @@
-const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const { Board } = require("../models/board");
 
@@ -35,4 +34,22 @@ module.exports = {
 
     res.redirect("/list_boards");
   },
+  handleDeleteBoard: async (req, res, next) => {
+    console.log(req.params.id);
+    const boardId = req.params.id;
+
+    const boardModel = new Board(req.database);
+
+    const board = await boardModel.find({ _id : boardId });
+
+    if (!board) {
+      console.log("Board not found.");
+      res.redirect("/list_boards?errorCode=2");
+      return;
+    }
+
+    boardModel.deleteOne({ _id : boardId });
+
+    res.redirect("/list_boards");
+  }
 };

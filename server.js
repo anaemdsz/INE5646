@@ -8,8 +8,8 @@ const { authenticate } = require("./src/auth");
 
 const { handleLogin } = require("./routes/login");
 const { handleLoadTasks } = require("./routes/view-board");
-const { handleLoadBoards, handleCreateBoards } = require("./routes/list-boards");
 const { handleCreateUser } = require("./routes/create-user");
+const { handleLoadBoards, handleCreateBoards, handleDeleteBoard } = require("./routes/list-boards");
 
 const dbURL =
   "mongodb+srv://antonio:6tytsjbFhChXDWka@cluster0.o6ecxhs.mongodb.net/?retryWrites=true&w=majority";
@@ -65,6 +65,7 @@ app.get("/load-tasks", urlencodedParser, handleLoadTasks);
 app.post("/login", urlencodedParser, handleLogin);
 app.post("/create-user", urlencodedParser, handleCreateUser);
 app.post("/create-board", urlencodedParser, handleCreateBoards)
+app.post("/delete-board/:id", urlencodedParser, handleDeleteBoard)
 // app.post("/edit-user", handleEditUser);
 
 // Board related requests

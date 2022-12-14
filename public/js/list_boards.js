@@ -4,14 +4,18 @@ const urlParameters = Object.fromEntries(
 
 if (urlParameters.errorCode) {
   const errorCode = parseInt(urlParameters.errorCode);
-}
 
-async function createBoard() {
-
-}
-
-async function deleteBoard(id) {
-  console.log("TODO: delete board where id = ", id);
+  switch (errorCode) {
+    case 1:
+      alert("Nome do quadro não foi inserido.");
+      break;
+    case 2:
+      alert("Quadro não encontrado.");
+      break;
+    default:
+      alert("Erro desconhecido");
+      break;
+  }
 }
 
 async function loadBoards() {
@@ -37,10 +41,12 @@ async function loadBoards() {
   for (let board of boards) {
     boardsContainer.innerHTML +=
     `
-      <div class="board-list-row">
-        <a href="/boards/${board._id}">${board.name}</a>
-        <button class="button button-red" onclick="deleteBoard(${board._id})">Excluir</button>
-      </div>
+      <form action="/delete-board/${board._id}" method="post">
+        <div class="board-list-row">
+          <a href="/boards/${board._id}">${board.name}</a>
+          <button class="button button-red" type="submit">Excluir</button>
+        </div>
+      </form>
     `;
   }
 }

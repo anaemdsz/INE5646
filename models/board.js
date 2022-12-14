@@ -38,6 +38,11 @@ class Board {
       : console.log("Failed to find the boards.", { query });
     return result;
   }
+
+  async deleteOne(query) {
+    const result = await this.db.collection("boards").deleteOne(query);
+    return result;
+  }
 }
 
 module.exports = {
