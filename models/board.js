@@ -3,9 +3,6 @@ const uuid = require("uuid");
 class Board {
   constructor(db) {
     this.db = db;
-    this.todo = [];
-    this.doing = [];
-    this.done = [];
   }
 
   async create(boardData) {
@@ -28,8 +25,18 @@ class Board {
     const result = await this.db.collection("boards").findOne(query);
 
     result
-      ? console.log("Successfully retrieved the board", { reuslt })
-      : console.log("Failed to find a board", { query });
+      ? console.log("Successfully retrieved the board", { result })
+      : console.log("Failed to find a board.", { query });
+    return result;
+  }
+
+  async findMany(query) {
+    const result = await this.db.collection("boards").find(query).toArray();
+
+    result
+      ? console.log("Successfully retrieved the boards", { result })
+      : console.log("Failed to find the boards.", { query });
+    return result;
   }
 }
 

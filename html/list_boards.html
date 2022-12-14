@@ -4,16 +4,18 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <link rel="stylesheet" type="text/css" href="../css/common.css" />
     <link rel="stylesheet" type="text/css" href="../css/list-board.css" />
+    <script src="../js/list_boards.js" defer></script>
   </head>
 
   <body>
     <!-- Help navigation during development, can be made prettier -->
     <div style="text-align: center">
       <nav>
-        <a href="./edit_user.html">Edit User</a> -
-        <a href="./list_boards.html">List Boards</a> -
-        <a href="./login.html">Login</a> - <a href="./signup.html">Signup</a> -
-        <a href="./view_board.html">View boards</a>
+        <a href="./edit_user">Edit User</a> -
+        <a href="./list_boards">List Boards</a> -
+        <a href="./login">Login</a> -
+        <a href="./create-user">Signup</a> -
+        <a href="./view_board">View boards</a>
       </nav>
     </div>
 
@@ -24,31 +26,23 @@
     <div class="content">
       <div id="board-list">
         <div id="boards">
-          <div class="board-list-row">
-            <a href="">Board Name</a>
-            <button class="button button-red">Excluir</button>
-          </div>
-          <div class="board-list-row">
-            <a href="">Board Name</a>
-            <button class="button button-red">Excluir</button>
-          </div>
-          <div class="board-list-row">
-            <a href="">Board Name</a>
-            <button class="button button-red">Excluir</button>
-          </div>
-          <div class="board-list-row">
-            <a href="">Board Name</a>
-            <button class="button button-red">Excluir</button>
-          </div>
+          <!--
+            <div class="board-list-row">
+              <a href="">Board Name</a>
+              <button class="button button-red">Excluir</button>
+            </div>
+          -->
         </div>
 
-        <div class="board-list-row">
-          <div>
-            <span>Novo quadro: </span>
-            <input class="input" />
+        <form action="create-board" method="post">
+          <div class="board-list-row">
+            <div>
+              <span>Novo quadro: </span>
+              <input class="input" name="name"/>
+            </div>
+            <button class="button button-green" type="submit" onsubmit="loadBoards()">Criar</button>
           </div>
-          <button class="button button-green">Criar</button>
-        </div>
+        </form>
       </div>
     </div>
   </body>

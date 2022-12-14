@@ -13,7 +13,7 @@ if (urlParameters.errorCode) {
       alert("Username nao foi inserido");
       break;
     case 3:
-      alert("As senhas fornecidas sao difernetes");
+      alert("As senhas fornecidas sao diferentes");
       break;
     case 4:
       alert("O username fornecido ja esta sendo usado");

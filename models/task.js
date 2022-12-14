@@ -25,8 +25,18 @@ class Task {
     const result = await this.db.collection("tasks").findOne(query);
 
     result
-      ? console.log("Successfully retrieved the task", { reuslt })
+      ? console.log("Successfully retrieved the task", { result })
       : console.log("Failed to find a task.", { query });
+    return result;
+  }
+
+  async findMany(query) {
+    const result = await this.db.collection("tasks").find(query).toArray();
+
+    result
+      ? console.log("Successfully retrieved the tasks", { result })
+      : console.log("Failed to find the tasks.", { query });
+    return result;
   }
 }
 

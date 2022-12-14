@@ -1,11 +1,15 @@
-const bodyParser = require("body-parser");
-const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
-const { handleCreateUser } = require("./routes/create-user");
-const { handleLogin } = require("./routes/login");
 const path = require("path");
-const { authenticate } = require("./src/auth");
+const express = require("express");
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const { MongoClient, ServerApiVersion } = require("mongodb");
+
+const { authenticate } = require("./src/auth");
+
+const { handleLogin } = require("./routes/login");
+const { handleLoadTasks } = require("./routes/view-board");
+const { handleLoadBoards, handleCreateBoards } = require("./routes/list-boards");
+const { handleCreateUser } = require("./routes/create-user");
 
 const dbURL =
   "mongodb+srv://antonio:6tytsjbFhChXDWka@cluster0.o6ecxhs.mongodb.net/?retryWrites=true&w=majority";
@@ -36,11 +40,31 @@ app.use(authenticate);
 app.get("/login", (req, res) =>
   res.sendFile(path.join(__dirname, "html", "login.html"))
 );
+
 app.get("/create-user", (req, res) =>
   res.sendFile(path.join(__dirname, "html", "signup.html"))
 );
-app.post("/create-user", urlencodedParser, handleCreateUser);
+
+app.get("/edit_user", (req, res) =>
+  res.sendFile(path.join(__dirname, "html", "edit_user.html"))
+);
+
+app.get("/list_boards", (req, res) => {
+  res.sendFile(path.join(__dirname, "html", "list_boards.html"));
+});
+
+app.get("/view_board", (req, res) =>
+  res.sendFile(path.join(__dirname, "html", "view_board.html"))
+);
+
+// Load resources
+app.get("/load-boards", urlencodedParser, handleLoadBoards);
+app.get("/load-tasks", urlencodedParser, handleLoadTasks);
+
+// Post
 app.post("/login", urlencodedParser, handleLogin);
+app.post("/create-user", urlencodedParser, handleCreateUser);
+app.post("/create-board", urlencodedParser, handleCreateBoards)
 // app.post("/edit-user", handleEditUser);
 
 // Board related requests

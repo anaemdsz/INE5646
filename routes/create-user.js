@@ -7,7 +7,7 @@ module.exports = {
       console.log(
         "User attempted to create an account without providing a password"
       );
-      res.redirect("/html/signup.html?errorCode=1");
+      res.redirect("/create-user?errorCode=1");
       return;
     }
 
@@ -15,13 +15,13 @@ module.exports = {
       console.log(
         "User attempted to create an account without providing an username"
       );
-      res.redirect("/html/signup.html?errorCode=2");
+      res.redirect("/create-user?errorCode=2");
       return;
     }
 
     if (req.body.confPassword !== req.body.password) {
       console.log("User's passwords do not match");
-      res.redirect("/html/signup.html?errorCode=3");
+      res.redirect("/create-user?errorCode=3");
       return;
     }
 
@@ -39,12 +39,12 @@ module.exports = {
       console.log(
         "User attempted to create an account with an username that was already taken."
       );
-      res.redirect("/html/signup.html?errorCode=4");
+      res.redirect("/create-user?errorCode=4");
       return;
     }
 
     await userModel.create(data);
 
-    res.redirect("/html/login.html");
+    res.redirect("/login");
   },
 };
