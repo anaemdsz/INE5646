@@ -1,3 +1,5 @@
+const fs = require('fs');
+const ejs = require('ejs');
 const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -7,9 +9,13 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const { authenticate } = require("./src/auth");
 
 const { handleLogin } = require("./routes/login");
-const { handleLoadTasks } = require("./routes/view-board");
-const { handleLoadBoards, handleCreateBoards } = require("./routes/list-boards");
-const { handleCreateUser } = require("./routes/create-user");
+const { handleViewBoard } = require("./routes/view-board");
+const { handleCreateUser, handleGetAllUsers } = require("./routes/create-user");
+const {
+        handleLoadBoards, handleCreateBoards, handleDeleteBoard,
+        handleCreateTask, handleDeleteTask, handleAddUser,
+        handleMoveTask
+      } = require("./routes/list-boards");
 
 const dbURL =
   "mongodb+srv://antonio:6tytsjbFhChXDWka@cluster0.o6ecxhs.mongodb.net/?retryWrites=true&w=majority";
@@ -17,6 +23,9 @@ const dbClient = new MongoClient(dbURL);
 const dbName = "KanbanBoard";
 
 const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', './html');
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
@@ -37,34 +46,64 @@ app.use(cookieParser());
 app.use(authenticate);
 
 // User related requests\
-app.get("/login", (req, res) =>
-  res.sendFile(path.join(__dirname, "html", "login.html"))
+app.get("/login", async (req, res) =>
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "login.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
+  }))
 );
 
-app.get("/create-user", (req, res) =>
-  res.sendFile(path.join(__dirname, "html", "signup.html"))
+app.get("/create-user", async (req, res) =>
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "signup.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
+  }))
 );
 
-app.get("/edit_user", (req, res) =>
-  res.sendFile(path.join(__dirname, "html", "edit_user.html"))
+app.get("/edit_user", async (req, res) =>
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "edit_user.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
+  }))
 );
 
-app.get("/list_boards", (req, res) => {
-  res.sendFile(path.join(__dirname, "html", "list_boards.html"));
+app.get("/boards", async (req, res) => {
+  let boards = await handleLoadBoards(req, res);
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "list_boards.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
+    boards : boards
+  }));
 });
 
-app.get("/view_board", (req, res) =>
-  res.sendFile(path.join(__dirname, "html", "view_board.html"))
-);
+app.get("/boards/:id", async (req, res) => {
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "view_board.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
+    board : await handleViewBoard(req, res),
+    users : await handleGetAllUsers(req, res),
+  }));
+});
 
 // Load resources
-app.get("/load-boards", urlencodedParser, handleLoadBoards);
-app.get("/load-tasks", urlencodedParser, handleLoadTasks);
+// app.get("/load-boards", urlencodedParser, handleLoadBoards);
+// app.get("/view-board/:id", urlencodedParser, handleViewBoard)
 
 // Post
 app.post("/login", urlencodedParser, handleLogin);
 app.post("/create-user", urlencodedParser, handleCreateUser);
 app.post("/create-board", urlencodedParser, handleCreateBoards)
+app.post("/boards/:id/add-user", urlencodedParser, handleAddUser)
+app.post("/boards/:id/delete", urlencodedParser, handleDeleteBoard)
+app.post("/boards/:id/create-task", urlencodedParser, handleCreateTask)
+app.post("/boards/:id/move-task/:taskId", urlencodedParser, handleMoveTask)
+app.post("/boards/:id/delete-task/:taskId", urlencodedParser, handleDeleteTask)
+
 // app.post("/edit-user", handleEditUser);
 
 // Board related requests

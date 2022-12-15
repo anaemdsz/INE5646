@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css" />
+    <link rel="stylesheet" type="text/css" href="../css/list-board.css" />
+    <script src="../js/boards.js"></script>
+  </head>
+
+  <body>
+    <!-- Help navigation during development, can be made prettier -->
+    <div style="text-align: center">
+      <%- include('header.ejs') %>
+    </div>
+
+    <div id="header">
+      <span>Seus Quadros</span>
+    </div>
+
+    <div class="content">
+      <div id="board-list">
+
+        <form action="/create-board" method="post">
+          <div class="board-list-row">
+            <div>
+              <span>Novo quadro: </span>
+              <input class="input" name="name"/>
+            </div>
+            <button class="button button-green" type="submit" onsubmit="loadBoards()">Criar</button>
+          </div>
+        </form>
+
+        <div id="boards">
+
+          <!-- Aqui serão injetados os quadros do usuário. -->
+
+          <% if (boards.length > 0) { %>
+            <% boards.forEach(board => { %>
+              <form action="/boards/<%= board._id %>/delete" method="post">
+                <div class="board-list-row">
+                  <a href="/boards/<%= board._id %>"> <%= board.name %> </a>
+                    <% if (board.username === user.username) { %>
+                      <button class="button button-red" type="submit"> Excluir </button>
+                    <% } else { %>
+                      <button class="button button-red" type="submit" style="visibility: hidden;" disabled> Excluir </button>
+                    <% } %>
+                </div>
+              </form>
+            <% }); %>
+          <% } else { %>
+            <div class="board-list-row">
+              <span> Nenhum quadro encontrado. </span>
+            </div>
+          <% } %>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

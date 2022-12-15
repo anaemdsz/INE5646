@@ -29,6 +29,15 @@ class User {
       : console.log("Failed to find the user.", { filter });
     return result;
   }
+
+  async findMany(query) {
+    const result = await this.db.collection("users").find(query).toArray();
+
+    result
+      ? console.log("Successfully retrieved the users", { result })
+      : console.log("Failed to find the users.", { query });
+    return result;
+  }
 }
 
 module.exports = {

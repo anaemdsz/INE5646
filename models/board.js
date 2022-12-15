@@ -14,7 +14,7 @@ class Board {
   async update(id, updatedData) {
     const result = await this.db
       .collection("boards")
-      .updateOne({ _id: id }, updatedData);
+      .updateOne({ _id: id }, { $set : updatedData });
 
     result.matchedCount > 0
       ? console.log("Successfully updated the board", { result })
@@ -36,6 +36,11 @@ class Board {
     result
       ? console.log("Successfully retrieved the boards", { result })
       : console.log("Failed to find the boards.", { query });
+    return result;
+  }
+
+  async deleteOne(query) {
+    const result = await this.db.collection("boards").deleteOne(query);
     return result;
   }
 }

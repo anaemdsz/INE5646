@@ -23,7 +23,7 @@ module.exports = {
       const jwtToken = jwt.sign({ username: user.username }, jwtSecret);
       res
         .cookie("authorization", jwtToken, { httpOnly: true, secure: true })
-        .redirect("/list_boards");
+        .redirect("/boards");
       return;
     }
     console.log("User login attempt failed, invalid username and/or password.");

@@ -3,29 +3,21 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <link rel="stylesheet" type="text/css" href="../css/common.css" />
+    <script src="../js/signup.js" defer></script>
   </head>
 
   <body>
-
     <!-- Help navigation during development, can be made prettier -->
-    <div style="text-align:center">
-      <div style="text-align: center">
-        <nav>
-          <a href="./edit_user">Edit User</a> -
-          <a href="./list_boards">List Boards</a> -
-          <a href="./login">Login</a> -
-          <a href="./create-user">Signup</a> -
-          <a href="./view_board">View boards</a>
-        </nav>
-      </div>
-  </div>
+    <div style="text-align: center">
+      <%- include('header.ejs') %>
+    </div>
 
     <div id="header">
-      <span>Editar usuario</span>
+      <span>Cadastrar usuario</span>
     </div>
 
     <div class="content">
-      <form action="/update-user" id="generic-form" method="post">
+      <form action="/create-user" id="generic-form" method="post">
         <div class="form-row">
           <span>Nome</span> <input class="input" name="name" />
         </div>
@@ -33,16 +25,19 @@
           <span>E-mail</span> <input type="email" class="input" name="email" />
         </div>
         <div class="form-row">
+          <span>Username</span> <input class="input" name="username" />
+        </div>
+        <div class="form-row">
           <span>Senha</span>
           <input type="password" class="input" name="password" />
         </div>
         <div class="form-row">
           <span>Confir. senha</span>
-          <input type="password" class="input" name="password" />
+          <input type="password" class="input" name="confPassword" />
         </div>
         <input
           type="submit"
-          value="Editar usuario"
+          value="Criar usuario"
           class="button button-green"
         />
       </form>

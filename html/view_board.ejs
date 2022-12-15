@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <link rel="stylesheet" type="text/css" href="../css/common.css" />
+    <link rel="stylesheet" type="text/css" href="../css/view-board.css" />
+  </head>
+
+  <body>
+    <!-- Help navigation during development, can be made prettier -->
+    <div style="text-align: center">
+      <%- include('header.ejs') %>
+    </div>
+
+    <div id="header">
+      <span> Quadro: <%= board.name %> </span>
+    </div>
+
+    <div class="content">
+      <div id="board">
+        <div id="board-header">
+
+          <div id="add-board" style="text-align: center;">
+            <form action="/boards/<%= board._id %>/create-task" method="post">
+              <div class="input-row">
+                <span>Titulo</span>
+                <input class="input" name="name"/>
+              </div>
+              <div class="input-row">
+                <span>Responsavel</span>
+                <select class="generic-select" name="username">
+                  <% users.forEach(user => { %>
+                    <option value="<%= user.username %>"> <%= user.username %> </option>
+                  <% }); %>
+                </select>
+              </div>
+              <div class="input-row">
+                <span>Status</span>
+                <select class="generic-select" name="column">
+                  <option value="1">TODO</option>
+                  <option value="2">DOING</option>
+                  <option value="3">DONE</option>
+                </select>
+              </div>
+              <button class="button button-green" type="submit">Adicionar tarefa</button>
+            </form>
+          </div>
+
+          <div id="add-user">
+            <form action="/boards/<%= board._id %>/add-user" method="post">
+              <div class="input-row">
+                <span>Participante</span>
+                <select class="generic-select" name="username">
+                  <% users.forEach(user => { %>
+                    <option value="<%= user.username %>"> <%= user.username %> </option>
+                  <% }); %>
+                </select>
+              </div>
+              <button class="button button-green" type="submit">Adicionar participante</button>
+            </form>
+          </div>
+
+        </div>
+        <div id="card-columns">
+          <div class="card-column">
+            <div class="card-column-title">TODO</div>
+            <% if (board.todoTasks && board.todoTasks.length > 0) { %>
+              <% board.todoTasks.forEach(task => { %>
+              <div class="card">
+                <form action="/boards/<%= board._id %>/delete-task/<%= task._id %>" method="post">
+                  <button class="button button-red" type="submit" >Excluir</button>
+                </form>
+                <div class="card-data">
+                  <span>Tarefa: <%= task.name %></span>
+                  <span>Responsavel: <%= task.username %></span>
+                </div>
+                <div class="move-buttons">
+                  <form action="/boards/<%= board._id %>/move-task/<%= task._id %>" method="post">
+                    <button class="button button-green" value="true" name="shouldMoveLeft" type="submit" style="visibility: hidden;" disabled><<< Mover</button>
+                    <button class="button button-green" value="false" name="shouldMoveLeft" type="submit">Mover >>></button>
+                  </form>
+                </div>
+              </div>
+              <% }); %>
+            <% } else { %>
+              <div class="card">
+                <span> Nenhuma tarefa encontrada. </span>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="card-column">
+            <div class="card-column-title">DOING</div>
+              <% if (board.doingTasks && board.doingTasks.length > 0) { %>
+                <% board.doingTasks.forEach(task => { %>
+                <div class="card">
+                  <form action="/boards/<%= board._id %>/delete-task/<%= task._id %>" method="post">
+                    <button class="button button-red" type="submit">Excluir</button>
+                  </form>
+                  <div class="card-data">
+                    <span>Tarefa: <%= task.name %></span>
+                    <span>Responsavel: <%= task.username %></span>
+                  </div>
+                  <div class="move-buttons">
+                    <form action="/boards/<%= board._id %>/move-task/<%= task._id %>" method="post">
+                      <button class="button button-green" value="true" name="shouldMoveLeft" type="submit"><<< Mover</button>
+                      <button class="button button-green" value="false" name="shouldMoveLeft" type="submit">Mover >>></button>
+                    </form>
+                  </div>
+                </div>
+                <% }); %>
+              <% } else { %>
+                <div class="card">
+                  <span> Nenhuma tarefa encontrada. </span>
+                </div>
+              <% } %>
+          </div>
+
+          <div class="card-column">
+            <div class="card-column-title">DONE</div>
+              <% if (board.doneTasks && board.doneTasks.length > 0) { %>
+                <% board.doneTasks.forEach(task => { %>
+                <div class="card">
+                  <form action="/boards/<%= board._id %>/delete-task/<%= task._id %>" method="post">
+                    <button class="button button-red" type="submit">Excluir</button>
+                  </form>
+                  <div class="card-data">
+                    <span>Tarefa: <%= task.name %></span>
+                    <span>Responsavel: <%= task.username %></span>
+                  </div>
+                  <div class="move-buttons">
+                    <form action="/boards/<%= board._id %>/move-task/<%= task._id %>" method="post">
+                      <button class="button button-green" value="true" name="shouldMoveLeft" type="submit"><<< Mover</button>
+                      <button class="button button-green" value="false" name="shouldMoveLeft" type="submit" style="visibility: hidden;" disabled>Mover >>></button>
+                    </form>
+                  </div>
+                </div>
+                <% }); %>
+              <% } else { %>
+                <div class="card">
+                  <span> Nenhuma tarefa encontrada. </span>
+                </div>
+              <% } %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -7,13 +7,16 @@ if (urlParameters.errorCode) {
 
   switch (errorCode) {
     case 1:
-      alert("Usuario e/ou senha incorretos");
+      alert("Nome do quadro não foi inserido.");
       break;
     case 2:
-      alert("Acesso negado. Efetue login primeiro.");
+      alert("Quadro não encontrado.");
+      break;
+    case 3:
+      alert("Usuário não tem permissão para excluir este quadro.");
       break;
     default:
-      alert("Erro desconhecido.");
+      alert("Erro desconhecido");
       break;
   }
 }
