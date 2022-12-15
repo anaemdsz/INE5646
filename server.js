@@ -11,7 +11,11 @@ const { authenticate } = require("./src/auth");
 const { handleLogin } = require("./routes/login");
 const { handleViewBoard } = require("./routes/view-board");
 const { handleCreateUser, handleGetAllUsers } = require("./routes/create-user");
-const { handleLoadBoards, handleCreateBoards, handleDeleteBoard, handleCreateTask, handleAddUser } = require("./routes/list-boards");
+const {
+        handleLoadBoards, handleCreateBoards, handleDeleteBoard,
+        handleCreateTask, handleDeleteTask, handleAddUser,
+        handleMoveTask
+      } = require("./routes/list-boards");
 
 const dbURL =
   "mongodb+srv://antonio:6tytsjbFhChXDWka@cluster0.o6ecxhs.mongodb.net/?retryWrites=true&w=majority";
@@ -74,9 +78,11 @@ app.get("/boards/:id", async (req, res) => {
 app.post("/login", urlencodedParser, handleLogin);
 app.post("/create-user", urlencodedParser, handleCreateUser);
 app.post("/create-board", urlencodedParser, handleCreateBoards)
+app.post("/boards/:id/add-user", urlencodedParser, handleAddUser)
 app.post("/boards/:id/delete", urlencodedParser, handleDeleteBoard)
 app.post("/boards/:id/create-task", urlencodedParser, handleCreateTask)
-app.post("/boards/:id/add-user", urlencodedParser, handleAddUser)
+app.post("/boards/:id/move-task/:taskId", urlencodedParser, handleMoveTask)
+app.post("/boards/:id/delete-task/:taskId", urlencodedParser, handleDeleteTask)
 
 // app.post("/edit-user", handleEditUser);
 

@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const uuid = require("uuid");
 const { Board } = require("../models/board");
 
 module.exports = {
@@ -53,6 +53,7 @@ module.exports = {
     }
 
     const task = {
+      _id : uuid.v4(),
       name : req.body.name ?? "Sem título.",
       username : req.body.username ?? "Nenhum.",
     }
@@ -79,6 +80,79 @@ module.exports = {
     await boardModel.update(boardId, board);
 
     console.log(`Updated board ${boardId}.`);
+
+    res.redirect(`/boards/${boardId}`);
+  },
+  handleDeleteTask: async (req, res, next) => {
+    const boardId = req.params.id;
+    const boardModel = new Board(req.database);
+    const board = await boardModel.find({ _id : boardId });
+
+    if (!board) {
+      console.log("Board not found.");
+      res.redirect("/boards?errorCode=2");
+      return;
+    }
+
+    const taskId = req.params.taskId;
+    board.todoTasks = (board.todoTasks ?? []).filter(x => x._id != taskId);
+    board.doingTasks = (board.doingTasks ?? []).filter(x => x._id != taskId);
+    board.doneTasks = (board.doneTasks ?? []).filter(x => x._id != taskId);
+
+    await boardModel.update(boardId, board);
+
+    console.log(`Deleted task ${taskId}.`);
+
+    res.redirect(`/boards/${boardId}`);
+  },
+  handleMoveTask: async (req, res, next) => {
+    const boardId = req.params.id;
+    const boardModel = new Board(req.database);
+    const board = await boardModel.find({ _id : boardId });
+
+    if (!board) {
+      console.log("Board not found.");
+      res.redirect("/boards?errorCode=2");
+      return;
+    }
+
+    const taskId = req.params.taskId;
+    const shouldMoveLeft = req.body.shouldMoveLeft === "true";
+    const shouldMoveRight = !shouldMoveLeft;
+
+    board.todoTasks = board.todoTasks ?? [];
+    board.doingTasks = board.doingTasks ?? [];
+    board.doneTasks = board.doneTasks ?? [];
+
+    // Search for task in lists
+    todoTasksFound = (board.todoTasks ?? []).filter(x => x._id == taskId);
+    doingTasksFound = (board.doingTasks ?? []).filter(x => x._id == taskId);
+    doneTasksFound = (board.doneTasks ?? []).filter(x => x._id == taskId);
+
+    // Remove task from all lists
+    if (todoTasksFound.length > 0 && shouldMoveRight) {
+      board.todoTasks = (board.todoTasks ?? []).filter(x => x._id != taskId);
+      board.doingTasks.push(todoTasksFound[0]);
+    }
+
+    if (doingTasksFound.length > 0) {
+      board.doingTasks = (board.doingTasks ?? []).filter(x => x._id != taskId);
+      if (shouldMoveLeft) {
+        board.todoTasks.push(doingTasksFound[0]);
+      }
+      if (shouldMoveRight) {
+        board.doneTasks.push(doingTasksFound[0]);
+      }
+    }
+
+    if (doneTasksFound.length > 0 && shouldMoveLeft) {
+      board.doneTasks = (board.doneTasks ?? []).filter(x => x._id != taskId);
+      board.doingTasks.push(doneTasksFound[0]);
+    }
+
+    await boardModel.update(boardId, board);
+
+    console.log(`Moved task ${taskId}.`);
 
     res.redirect(`/boards/${boardId}`);
   },
