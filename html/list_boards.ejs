@@ -39,7 +39,11 @@
               <form action="/boards/<%= board._id %>/delete" method="post">
                 <div class="board-list-row">
                   <a href="/boards/<%= board._id %>"> <%= board.name %> </a>
-                  <button class="button button-red" type="submit">Excluir</button>
+                    <% if (board.username === user.username) { %>
+                      <button class="button button-red" type="submit"> Excluir </button>
+                    <% } else { %>
+                      <button class="button button-red" type="submit" style="visibility: hidden;" disabled> Excluir </button>
+                    <% } %>
                 </div>
               </form>
             <% }); %>

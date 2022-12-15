@@ -47,24 +47,44 @@ app.use(authenticate);
 
 // User related requests\
 app.get("/login", async (req, res) =>
-  res.send(await ejs.renderFile(path.join(__dirname, "html", "login.ejs")))
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "login.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
+  }))
 );
 
 app.get("/create-user", async (req, res) =>
-  res.send(await ejs.renderFile(path.join(__dirname, "html", "signup.ejs")))
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "signup.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
+  }))
 );
 
 app.get("/edit_user", async (req, res) =>
-  res.send(await ejs.renderFile(path.join(__dirname, "html", "edit_user.ejs")))
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "edit_user.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
+  }))
 );
 
 app.get("/boards", async (req, res) => {
   let boards = await handleLoadBoards(req, res);
-  res.send(await ejs.renderFile(path.join(__dirname, "html", "list_boards.ejs"), { boards : boards }));
+  res.send(await ejs.renderFile(path.join(__dirname, "html", "list_boards.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
+    boards : boards
+  }));
 });
 
 app.get("/boards/:id", async (req, res) => {
   res.send(await ejs.renderFile(path.join(__dirname, "html", "view_board.ejs"), {
+    user : req.user
+      ? { name : req.user.name, username : req.user.username }
+      : null,
     board : await handleViewBoard(req, res),
     users : await handleGetAllUsers(req, res),
   }));

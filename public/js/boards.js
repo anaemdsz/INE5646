@@ -12,6 +12,9 @@ if (urlParameters.errorCode) {
     case 2:
       alert("Quadro não encontrado.");
       break;
+    case 3:
+      alert("Usuário não tem permissão para excluir este quadro.");
+      break;
     default:
       alert("Erro desconhecido");
       break;

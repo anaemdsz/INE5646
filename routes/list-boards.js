@@ -37,6 +37,12 @@ module.exports = {
       return;
     }
 
+    if (!board.username === req.user.username) {
+      console.log("User not allowed to delete this board.");
+      res.redirect("/boards?errorCode=3");
+      return;
+    }
+
     boardModel.deleteOne({ _id : boardId });
 
     res.redirect("/boards");
