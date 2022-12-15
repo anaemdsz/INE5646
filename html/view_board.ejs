@@ -47,12 +47,12 @@
           </div>
 
           <div id="add-user">
-            <form action="boards/<%= board._id %>/add-user" method="post">
+            <form action="/boards/<%= board._id %>/add-user" method="post">
               <div class="input-row">
                 <span>Participante</span>
-                <select class="generic-select" name="userId">
+                <select class="generic-select" name="username">
                   <% users.forEach(user => { %>
-                    <option value="<%= user._id %>"> <%= user.username %> </option>
+                    <option value="<%= user.username %>"> <%= user.username %> </option>
                   <% }); %>
                 </select>
               </div>

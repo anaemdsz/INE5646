@@ -3,7 +3,7 @@ const { Board } = require("../models/board");
 
 module.exports = {
   handleLoadBoards: async (req, res) => {
-    const boards = await new Board(req.database).findMany({ username  : req.user.username });
+    const boards = await new Board(req.database).findMany( { $or : [ { username : req.user.username }, { users : req.user.username } ] });
     console.log("Loaded boards succesfully.");
     return boards;
   },
@@ -81,5 +81,26 @@ module.exports = {
     console.log(`Updated board ${boardId}.`);
 
     res.redirect(`/boards/${boardId}`);
-  }
+  },
+  handleAddUser: async (req, res, next) => {
+    const boardId = req.params.id;
+    const boardModel = new Board(req.database);
+    let board = await boardModel.find({ _id : boardId });
+
+    if (!board) {
+      console.log("Board not found.");
+      res.redirect(`/boards/?errorCode=2`);
+      return;
+    }
+
+    let users = board.users ?? [];
+    users.push(req.body.username);
+    board.users = users;
+
+    await boardModel.update(boardId, board);
+
+    console.log(`Updated board ${boardId}.`);
+
+    res.redirect(`/boards/${boardId}`);
+  },
 };
