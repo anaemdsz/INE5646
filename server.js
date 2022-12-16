@@ -25,8 +25,6 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', './html');
-app.use(authenticate);
-app.use(cookieParser());
 
 app.use(express.static("public"));
 
@@ -34,6 +32,9 @@ app.use((req, res, next) => {
   req.database = dbClient.db(dbName);
   next();
 });
+
+app.use(cookieParser());
+app.use(authenticate);
 
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
