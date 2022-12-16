@@ -11,14 +11,14 @@ class User {
     console.log("User succesfully created", { data });
   }
 
-  async update(id, newData) {
+  async update(username, newData) {
     const result = await this.db
       .collection("users")
-      .updateOne({ _id: id }, newData);
+      .updateOne({ username: username }, { $set : newData });
 
     result.matchedCount > 0
       ? console.log("Succesfully updated the user", { result })
-      : console.log("Couldn't find the required user", { id, newData, result });
+      : console.log("Couldn't find the required user", { username, newData, result });
   }
 
   async find(filter) {

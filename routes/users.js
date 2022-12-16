@@ -47,6 +47,59 @@ module.exports = {
 
     res.redirect("/login");
   },
+  handleEditUser: async (req, res) => {
+
+    if (!req.body.name || req.body.name === "") {
+      console.log(
+        "User attempted to edit account without providing an name"
+      );
+      res.redirect("/edit-user?errorCode=1");
+      return;
+    }
+
+    if (!req.body.email || req.body.email === "") {
+      console.log(
+        "User attempted to edit account without providing an email"
+      );
+      res.redirect("/edit-user?errorCode=2");
+      return;
+    }
+
+    if (!req.body.password || req.body.password === "") {
+      console.log(
+        "User attempted to edit account without providing a password"
+      );
+      res.redirect("/edit-user?errorCode=3");
+      return;
+    }
+
+    if (req.body.confPassword !== req.body.password) {
+      console.log("User's passwords do not match");
+      res.redirect("/edit-user?errorCode=4");
+      return;
+    }
+
+    const data = {
+      name: req.body.name ?? "",
+      email: req.body.email ?? "",
+      password: await bcrypt.hash(req.body.password, 10),
+    };
+
+    const userModel = new User(req.database);
+    const user = await userModel.find({ username: req.user.username });
+
+    if (!user) {
+      console.log(
+        "User attempted to edit account that does not exist."
+      );
+      res.redirect("/edit-user?errorCode=5");
+      return;
+    }
+
+    await userModel.update(req.user.username , data)
+
+    res.redirect("/boards");
+  },
   handleGetAllUsers: async (req, res) => {
     const users = new User(req.database).findMany({});
     return users;

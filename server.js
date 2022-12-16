@@ -4,35 +4,29 @@ const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient } = require("mongodb");
 
+// Files
 const { authenticate } = require("./src/auth");
 
 const { handleLogin } = require("./routes/login");
-const { handleViewBoard } = require("./routes/view-board");
-const { handleCreateUser, handleGetAllUsers } = require("./routes/create-user");
-const {
-        handleLoadBoards, handleCreateBoards, handleDeleteBoard,
-        handleCreateTask, handleDeleteTask, handleAddUser,
-        handleMoveTask
-      } = require("./routes/list-boards");
+const { handleCreateUser, handleEditUser, handleGetAllUsers } = require("./routes/users");
+const { handleViewBoard, handleLoadBoards, handleCreateBoards,
+        handleDeleteBoard, handleCreateTask, handleDeleteTask,
+        handleAddUser, handleMoveTask  } = require("./routes/boards");
 
 const dbURL =
   "mongodb+srv://antonio:6tytsjbFhChXDWka@cluster0.o6ecxhs.mongodb.net/?retryWrites=true&w=majority";
 const dbClient = new MongoClient(dbURL);
 const dbName = "KanbanBoard";
 
+// App
 const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', './html');
-
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
-
-const connectToDB = async () => {
-  await dbClient.connect();
-  console.log("Succesfully connected to the database server");
-};
+app.use(authenticate);
+app.use(cookieParser());
 
 app.use(express.static("public"));
 
@@ -41,11 +35,14 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cookieParser());
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-app.use(authenticate);
+const connectToDB = async () => {
+  await dbClient.connect();
+  console.log("Succesfully connected to the database server");
+};
 
-// User related requests\
+// Get
 app.get("/login", async (req, res) =>
   res.send(await ejs.renderFile(path.join(__dirname, "html", "login.ejs"), {
     user : req.user
@@ -62,7 +59,7 @@ app.get("/create-user", async (req, res) =>
   }))
 );
 
-app.get("/edit_user", async (req, res) =>
+app.get("/edit-user", async (req, res) =>
   res.send(await ejs.renderFile(path.join(__dirname, "html", "edit_user.ejs"), {
     user : req.user
       ? { name : req.user.name, username : req.user.username }
@@ -90,33 +87,18 @@ app.get("/boards/:id", async (req, res) => {
   }));
 });
 
-// Load resources
-// app.get("/load-boards", urlencodedParser, handleLoadBoards);
-// app.get("/view-board/:id", urlencodedParser, handleViewBoard)
-
 // Post
 app.post("/login", urlencodedParser, handleLogin);
+app.post("/edit-user", urlencodedParser, handleEditUser);
 app.post("/create-user", urlencodedParser, handleCreateUser);
-app.post("/create-board", urlencodedParser, handleCreateBoards)
-app.post("/boards/:id/add-user", urlencodedParser, handleAddUser)
-app.post("/boards/:id/delete", urlencodedParser, handleDeleteBoard)
-app.post("/boards/:id/create-task", urlencodedParser, handleCreateTask)
-app.post("/boards/:id/move-task/:taskId", urlencodedParser, handleMoveTask)
-app.post("/boards/:id/delete-task/:taskId", urlencodedParser, handleDeleteTask)
+app.post("/create-board", urlencodedParser, handleCreateBoards);
+app.post("/boards/:id/add-user", urlencodedParser, handleAddUser);
+app.post("/boards/:id/delete", urlencodedParser, handleDeleteBoard);
+app.post("/boards/:id/create-task", urlencodedParser, handleCreateTask);
+app.post("/boards/:id/move-task/:taskId", urlencodedParser, handleMoveTask);
+app.post("/boards/:id/delete-task/:taskId", urlencodedParser, handleDeleteTask);
 
-// app.post("/edit-user", handleEditUser);
-
-// Board related requests
-// app.get("/boards", handleShowBoards);
-// app.get("/boards/name", handleShowSpecificBoard);
-
-// app.post("/delete-board", handleDeleteBoard);
-// app.post("/create-board", handleCreateBoard);
-// app.post("/add-task", handleAddTask);
-// app.post("/invite-user", handleInviteUser);
-// app.post("/move-task", handleMoveTask);
-// app.post("/delete-task", handleDeleteTask);
-
+// Init server
 app.listen(3001, async () => {
   await connectToDB();
   console.log("Express server succesfully started.");
