@@ -35,7 +35,7 @@
 #board-header {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   margin-bottom: 15px;
 }
@@ -52,7 +52,18 @@
 
 #add-board .input-row,
 #add-user .input-row {
+  display: flex;
   margin-bottom: 5px;
+}
+
+#add-board .input-row select,
+#add-user .input-row select{
+  margin-left: 5px;
+  flex-grow: 3;
+}
+
+#add-board .input-row input {
+  margin-left: 5px;
 }
 
 @media (max-width: 1200px) {

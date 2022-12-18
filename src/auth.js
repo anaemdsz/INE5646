@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { jwtSecret } = require("./jwt");
 const { User } = require("../models/user");
 
-const unAuthenticatedRoutes = ["/create-user", "/login"];
+const unAuthenticatedRoutes = ["/", "/create-user", "/login"];
 
 module.exports = {
   authenticate: async (req, res, next) => {
@@ -18,8 +18,9 @@ module.exports = {
           `Access denied to route '${req.originalUrl}', user is not authenticated`
         );
         res.redirect("/login?errorCode=2");
+      } else {
+        next();
       }
-      next();
       return;
     }
 
@@ -28,10 +29,11 @@ module.exports = {
       console.log("Valid token, payload: ", { payload });
 
       const user = await new User(req.database).find({ username: payload.username });
-      if (!user)
+      if (!user) {
         throw new Error(
-          "Token is valid but the user was not found. Maybe the user was deleted?"
+        "Token is valid but the user was not found. Maybe the user was deleted?"
         );
+      }
 
       req.user = user;
       console.log("User succesfully authenticated.");

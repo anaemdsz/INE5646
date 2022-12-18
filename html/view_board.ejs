@@ -23,11 +23,11 @@
           <div id="add-board" style="text-align: center;">
             <form action="/boards/<%= board._id %>/create-task" method="post">
               <div class="input-row">
-                <span>Titulo</span>
+                <span>Título</span>
                 <input class="input" name="name"/>
               </div>
               <div class="input-row">
-                <span>Responsavel</span>
+                <span>Responsável</span>
                 <select class="generic-select" name="username">
                   <% users.forEach(user => { %>
                     <option value="<%= user.username %>"> <%= user.username %> </option>

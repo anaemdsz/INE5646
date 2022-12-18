@@ -1,4 +1,3 @@
-const fs = require('fs');
 const ejs = require('ejs');
 const path = require("path");
 const express = require("express");
@@ -15,9 +14,14 @@ const { handleViewBoard, handleLoadBoards, handleCreateBoards,
         handleDeleteBoard, handleCreateTask, handleDeleteTask,
         handleAddUser, handleMoveTask  } = require("./routes/boards");
 
-const dbURL =
-  "mongodb+srv://antonio:6tytsjbFhChXDWka@cluster0.o6ecxhs.mongodb.net/?retryWrites=true&w=majority";
-const dbClient = new MongoClient(dbURL);
+// const dbURL =
+//   "mongodb+srv://antonio:6tytsjbFhChXDWka@cluster0.o6ecxhs.mongodb.net/?retryWrites=true&w=majority";
+// const dbClient = new MongoClient(dbURL);
+// const dbName = "KanbanBoard";
+
+const DB_LOCAL = 'nuvem-database';
+const dbURL = `mongodb://localhost/27017/${DB_LOCAL}`;
+const dbClient = new MongoClient(dbURL, {useUnifiedTopology : true});
 const dbName = "KanbanBoard";
 
 // App
@@ -25,6 +29,13 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', './html');
+
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
+
+const connectToDB = async () => {
+  await dbClient.connect();
+  console.log("Succesfully connected to the database server");
+};
 
 app.use(express.static("public"));
 
@@ -36,14 +47,8 @@ app.use((req, res, next) => {
 app.use(cookieParser());
 app.use(authenticate);
 
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
-
-const connectToDB = async () => {
-  await dbClient.connect();
-  console.log("Succesfully connected to the database server");
-};
-
 // Get
+
 app.get("/login", async (req, res) =>
   res.send(await ejs.renderFile(path.join(__dirname, "html", "login.ejs"), {
     user : req.user
@@ -52,7 +57,12 @@ app.get("/login", async (req, res) =>
   }))
 );
 
-app.get("/create-user", async (req, res) =>
+app.get("/logout", async (req, res) => {
+  res.clearCookie('authorization', {path : '/'});
+  res.redirect('/login');
+});
+
+app.get(["/", "/create-user"], async (req, res) =>
   res.send(await ejs.renderFile(path.join(__dirname, "html", "signup.ejs"), {
     user : req.user
       ? { name : req.user.name, username : req.user.username }

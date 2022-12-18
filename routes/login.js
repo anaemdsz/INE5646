@@ -22,7 +22,7 @@ module.exports = {
     if (await bcrypt.compare(req.body.password, userHashedPassword)) {
       const jwtToken = jwt.sign({ username: user.username }, jwtSecret);
       res
-        .cookie("authorization", jwtToken, { httpOnly: true, secure: true })
+        .cookie("authorization", jwtToken, { httpOnly: true, secure: false })
         .redirect("/boards");
       return;
     }
